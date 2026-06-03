@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meet your Sidekick — Bob</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Mulish:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --coral:#FF4B5C; --coral-deep:#E5384F; --coral-soft:#FFE3E3;
+    --cream:#FFF7F1; --paper:#FFFFFF;
+    --ink:#2B2330; --ink-soft:#6A6270; --ink-faint:#A39CAA;
+    --teal:#13C2A8; --teal-soft:#D6F7F0;
+    --yellow:#FFC24B; --yellow-soft:#FFF0CF;
+    --lav:#9B8CFF; --lav-soft:#ECE7FF;
+    --blue:#4D8DF6; --blue-soft:#E2EDFE;
+    --green:#19B27A;
+    --line:#F0E7E0;
+    --disp:'Fredoka', ui-rounded, system-ui, sans-serif;
+    --body:'Mulish', ui-sans-serif, system-ui, sans-serif;
+    --sh:0 10px 30px rgba(43,35,48,.10);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    font-family:var(--body); color:var(--ink); min-height:100vh;
+    display:grid; place-items:center; padding:30px 16px;
+    background:var(--cream); overflow-x:hidden; position:relative;
+  }
+  /* organic paper-cutout blobs (HiBob brand language) */
+  .blob{position:fixed; border-radius:46% 54% 58% 42%/52% 48% 52% 48%; filter:blur(2px); opacity:.5; z-index:0; animation:drift 18s ease-in-out infinite}
+  .b1{width:340px;height:340px;background:var(--coral-soft); top:-90px; left:-100px}
+  .b2{width:300px;height:300px;background:var(--teal-soft); bottom:-110px; right:-90px; animation-delay:-6s}
+  .b3{width:220px;height:220px;background:var(--yellow-soft); top:42%; left:-130px; animation-delay:-3s}
+  .b4{width:200px;height:200px;background:var(--lav-soft); top:-60px; right:8%; animation-delay:-9s}
+  @keyframes drift{0%,100%{transform:translate(0,0) rotate(0)}50%{transform:translate(20px,-26px) rotate(12deg)}}
+
+  /* phone */
+  .phone{position:relative; z-index:1; width:392px; max-width:100%; height:min(812px,94vh); background:var(--paper);
+    border-radius:46px; box-shadow:0 40px 90px rgba(43,35,48,.22), 0 0 0 11px #1d1822, 0 0 0 12px #322b38;
+    overflow:hidden; display:flex; flex-direction:column}
+  .notch{position:absolute; top:0; left:50%; transform:translateX(-50%); width:140px; height:26px; background:#1d1822; border-radius:0 0 16px 16px; z-index:30}
+  .statusbar{height:42px; display:flex; align-items:center; justify-content:space-between; padding:0 26px; font-family:var(--disp); font-weight:600; font-size:13px; color:var(--ink); flex:none}
+  .statusbar .r{display:flex; gap:6px; align-items:center; font-size:12px}
+
+  /* app header */
+  .appbar{padding:6px 22px 10px; display:flex; align-items:center; justify-content:space-between; flex:none}
+  .appbar .brand{display:flex; align-items:center; gap:8px}
+  .appbar .logo{width:30px;height:30px;border-radius:9px;background:var(--ink);color:#fff;display:grid;place-items:center;font-family:var(--disp);font-weight:700;font-size:17px}
+  .appbar b{font-family:var(--disp); font-weight:600; font-size:18px}
+  .privacy{display:flex; align-items:center; gap:5px; font-size:11px; font-weight:700; color:var(--teal); background:var(--teal-soft); padding:5px 10px; border-radius:20px}
+  .privacy svg{width:12px;height:12px}
+
+  /* scroll body */
+  .screen{flex:1; min-height:0; overflow:hidden; padding:4px 20px 10px; display:flex; flex-direction:column}
+  .screen::-webkit-scrollbar{display:none}
+
+  /* hero / character */
+  .stage{position:relative; padding:4px 0 2px; text-align:center; flex:1 1 auto; min-height:0; display:flex; flex-direction:column; justify-content:center; align-items:center}
+  .haze{position:absolute; left:50%; top:46%; transform:translate(-50%,-50%); width:clamp(150px,32vh,240px); height:clamp(150px,32vh,240px); border-radius:50%; background:radial-gradient(circle, rgba(255,75,92,.16), transparent 65%); opacity:0; transition:opacity .6s; z-index:0}
+  .lvlpill{display:inline-flex; align-items:center; gap:6px; font-family:var(--disp); font-weight:600; font-size:12px; color:var(--coral-deep); background:var(--coral-soft); padding:5px 12px; border-radius:20px; margin-bottom:4px; transition:.4s; position:relative; z-index:2}
+  .charwrap{position:relative; z-index:1; width:clamp(118px,25vh,186px); height:clamp(118px,25vh,186px); margin:0 auto; transition:transform .7s cubic-bezier(.2,1.3,.35,1)}
+  .bobber{animation:bob 3.4s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+  .charwrap svg{width:100%; height:100%; overflow:visible}
+  .ring{transition:stroke-dashoffset 1s cubic-bezier(.2,.8,.2,1)}
+  .arm,.acc,.acc2{opacity:0; transition:opacity .6s .2s}
+  .show{opacity:1 !important}
+  .eye{animation:blink 4.5s infinite}
+  @keyframes blink{0%,94%,100%{transform:scaleY(1)}97%{transform:scaleY(.1)}}
+
+  .speech{background:var(--paper); border:1.5px solid var(--line); border-radius:22px; border-top-left-radius:8px; padding:12px 15px; box-shadow:var(--sh); margin-top:6px; max-width:330px; position:relative; z-index:2; animation:rise .5s cubic-bezier(.2,.9,.3,1) both}
+  @keyframes rise{from{opacity:0; transform:translateY(12px)}to{opacity:1; transform:translateY(0)}}
+  .speech h2{font-family:var(--disp); font-weight:600; font-size:clamp(17px,2.4vh,20px); line-height:1.25; letter-spacing:-.2px}
+  .speech p{font-size:clamp(12.5px,1.7vh,13.5px); color:var(--ink-soft); margin-top:4px; line-height:1.45}
+
+  /* abilities */
+  .ablabel{font-family:var(--disp); font-weight:600; font-size:11px; color:var(--ink-faint); margin:10px 2px 7px; text-transform:uppercase; letter-spacing:.06em; flex:none}
+  .abilities{display:grid; grid-template-columns:repeat(4,1fr); gap:8px; flex:none}
+  .ab{background:var(--paper); border:1.5px solid var(--line); border-radius:15px; padding:9px 5px 8px; text-align:center; position:relative; transition:.45s cubic-bezier(.2,1.2,.3,1)}
+  .ab .ai{width:30px;height:30px;border-radius:10px;margin:0 auto 5px; display:grid;place-items:center; background:#F4EFEA; transition:.4s}
+  .ab .ai svg{width:18px;height:18px; stroke:var(--ink-faint)}
+  .ab .al{font-size:10px; font-weight:700; color:var(--ink-faint); line-height:1.2}
+  .ab.on{border-color:transparent; box-shadow:0 6px 16px rgba(43,35,48,.08)}
+  .ab.on .al{color:var(--ink)}
+  .ab.on .ai svg{stroke:#fff}
+  .ab.on .ai{transform:scale(1.05)}
+  .ab[data-c="know"].on .ai{background:var(--coral)}
+  .ab[data-c="dir"].on .ai{background:var(--teal)}
+  .ab[data-c="cal"].on .ai{background:var(--blue)}
+  .ab[data-c="dept"].on .ai{background:var(--lav)}
+  .ab .badge{position:absolute; top:-6px; right:-4px; width:18px;height:18px;border-radius:50%;background:var(--green);display:none;place-items:center; box-shadow:0 2px 6px rgba(25,178,122,.5)}
+  .ab.on .badge{display:grid; animation:pop .4s cubic-bezier(.2,1.5,.4,1)}
+  .ab .badge svg{width:11px;height:11px;stroke:#fff;stroke-width:3.5}
+  @keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
+  .ab.locked{opacity:.6}
+  .ab .lockico{position:absolute; top:7px; right:8px; font-size:10px; opacity:.5}
+
+  /* action zone */
+  .actions{margin-top:8px; padding-top:0; flex:none}
+  .chips{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:4px}
+  .chip{font-family:var(--body); font-weight:700; font-size:13.5px; padding:11px 15px; border-radius:14px; border:1.5px solid var(--line); background:var(--paper); color:var(--ink); cursor:pointer; transition:.15s}
+  .chip:hover{border-color:var(--coral); color:var(--coral-deep); transform:translateY(-2px)}
+
+  /* permission card */
+  .perm{background:var(--paper); border:1.5px solid var(--coral-soft); border-radius:20px; padding:15px 16px; box-shadow:var(--sh); animation:rise .45s both}
+  .perm .pt{display:flex; align-items:center; gap:9px; margin-bottom:8px}
+  .perm .pi{width:38px;height:38px;border-radius:12px; background:var(--coral-soft); display:grid;place-items:center; flex:none}
+  .perm .pi svg{width:20px;height:20px; stroke:var(--coral-deep)}
+  .perm h3{font-family:var(--disp); font-weight:600; font-size:16px}
+  .perm .ask{font-size:13.5px; color:var(--ink-soft); line-height:1.5; margin-bottom:10px}
+  .perm .ask b{color:var(--ink)}
+  .perm .micro{display:flex; align-items:center; gap:6px; font-size:11px; font-weight:700; color:var(--teal); background:var(--teal-soft); padding:6px 9px; border-radius:10px; margin-bottom:12px}
+  .perm .micro svg{width:12px;height:12px}
+
+  .btn{width:100%; font-family:var(--disp); font-weight:600; font-size:15px; padding:12px; border-radius:15px; border:0; cursor:pointer; transition:.18s; display:flex; align-items:center; justify-content:center; gap:8px}
+  .btn.primary{background:var(--coral); color:#fff; box-shadow:0 8px 20px rgba(255,75,92,.34)}
+  .btn.primary:hover{background:var(--coral-deep); transform:translateY(-2px)}
+  .btn.primary:active{transform:translateY(0)}
+  .btn.soft{background:transparent; color:var(--ink-faint); font-size:13.5px; padding:9px; font-weight:600; font-family:var(--body)}
+  .btn.soft:hover{color:var(--ink)}
+  .btn svg{width:18px;height:18px}
+  .btn.ok{background:var(--green); box-shadow:0 8px 20px rgba(25,178,122,.3)}
+
+  /* mini reveal card (people / coffee) */
+  .reveal{background:var(--paper); border:1.5px solid var(--line); border-radius:18px; padding:13px 14px; box-shadow:var(--sh); margin-bottom:10px; display:flex; align-items:center; gap:12px; animation:rise .5s both}
+  .reveal .av{width:44px;height:44px;border-radius:14px; flex:none; display:grid;place-items:center; font-family:var(--disp); font-weight:600; color:#fff; font-size:16px}
+  .reveal .rn{font-family:var(--disp); font-weight:600; font-size:15px}
+  .reveal .rr{font-size:12px; color:var(--ink-faint)}
+  .reveal .rtag{margin-left:auto; font-size:11px; font-weight:700; color:var(--teal); background:var(--teal-soft); padding:4px 9px; border-radius:20px}
+
+  /* progress dots */
+  .dots{display:flex; justify-content:center; gap:7px; padding:8px 0 2px; flex:none}
+  .dots i{width:7px;height:7px;border-radius:50%; background:var(--line); transition:.3s}
+  .dots i.on{background:var(--coral); width:22px; border-radius:6px}
+
+  .toast{position:absolute; top:14px; left:50%; transform:translateX(-50%) translateY(-150%); z-index:40; background:var(--ink); color:#fff; border-radius:18px; padding:13px 18px; display:flex; align-items:center; gap:12px; box-shadow:0 16px 40px rgba(43,35,48,.4); transition:transform .55s cubic-bezier(.2,1.3,.3,1); width:max-content; max-width:320px}
+  .toast.show{transform:translateX(-50%) translateY(0)}
+  .toast .ti{width:38px;height:38px;border-radius:11px;background:linear-gradient(140deg,var(--yellow),var(--coral));display:grid;place-items:center;flex:none}
+  .toast .ti svg{width:21px;height:21px;stroke:#fff;stroke-width:2.4}
+  .toast h5{font-family:var(--disp); font-weight:600; font-size:14px}
+  .toast p{font-size:11.5px; color:rgba(255,255,255,.75)}
+  .spark{position:absolute; z-index:39; pointer-events:none}
+
+  /* ---- responsive: real mobile fills the screen, no bezel ---- */
+  @media (max-width:480px){
+    body{padding:0; place-items:stretch}
+    .phone{width:100%; max-width:none; height:100vh; height:100dvh; border-radius:0;
+      box-shadow:none}
+    .notch, .statusbar{display:none}
+    .appbar{padding-top:14px}
+    .blob{opacity:.4}
+  }
+  /* short windows on web: shrink the character a touch more */
+  @media (max-height:640px){
+    .charwrap{width:clamp(104px,22vh,150px); height:clamp(104px,22vh,150px)}
+    .ablabel{margin:7px 2px 5px}
+  }
+  @media (hover:none) and (pointer:coarse){
+    .chip:hover,.btn.primary:hover{transform:none}
+  }
+</style>
+</head>
+<body>
+  <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div class="blob b4"></div>
+
+  <div class="phone">
+    <div class="notch"></div>
+    <div class="statusbar"><span>9:41</span><span class="r">📶 &nbsp;🔋</span></div>
+
+    <div class="appbar">
+      <div class="brand"><div class="logo">b</div><b>bob</b></div>
+      <div class="privacy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Private</div>
+    </div>
+
+    <div class="screen">
+      <!-- CHARACTER -->
+      <div class="stage">
+        <div class="haze" id="haze"></div>
+        <div class="lvlpill" id="lvlpill">✦ Level 1 · Helper</div>
+        <div class="charwrap" id="charwrap" style="transform:scale(.82)">
+          <div class="bobber">
+            <svg viewBox="0 0 200 200">
+              <defs>
+                <linearGradient id="bodyG" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#FF6B73"/><stop offset="1" stop-color="#FF3D5A"/>
+                </linearGradient>
+                <linearGradient id="ringG" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#FFC24B"/><stop offset="1" stop-color="#FF4B5C"/>
+                </linearGradient>
+              </defs>
+              <!-- XP ring -->
+              <circle cx="100" cy="100" r="86" fill="none" stroke="#F0E7E0" stroke-width="6"/>
+              <circle id="ring" class="ring" cx="100" cy="100" r="86" fill="none" stroke="url(#ringG)" stroke-width="6"
+                      stroke-linecap="round" stroke-dasharray="540" stroke-dashoffset="540" transform="rotate(-90 100 100)"/>
+              <!-- arms (L2+) -->
+              <ellipse class="arm" id="armL" cx="44" cy="116" rx="13" ry="20" fill="#FF5566" transform="rotate(24 44 116)"/>
+              <ellipse class="arm" id="armR" cx="156" cy="116" rx="13" ry="20" fill="#FF5566" transform="rotate(-24 156 116)"/>
+              <!-- antenna -->
+              <line x1="100" y1="58" x2="100" y2="42" stroke="#FF8A93" stroke-width="4" stroke-linecap="round"/>
+              <circle id="antdot" cx="100" cy="40" r="6" fill="#FFC24B"/>
+              <!-- accessory: sparkle crown (L3) -->
+              <g class="acc" id="acc">
+                <path d="M82 36 l6 -14 6 12 6 -16 6 18z" fill="#FFC24B" stroke="#FF9F1C" stroke-width="1.5" stroke-linejoin="round"/>
+              </g>
+              <!-- body -->
+              <rect x="58" y="62" width="84" height="80" rx="34" fill="url(#bodyG)"/>
+              <!-- cheeks -->
+              <circle cx="76" cy="112" r="7" fill="#FF8A93" opacity=".7"/>
+              <circle cx="124" cy="112" r="7" fill="#FF8A93" opacity=".7"/>
+              <!-- eyes -->
+              <g class="eye" style="transform-origin:84px 96px"><circle cx="84" cy="96" r="10" fill="#fff"/><circle cx="86" cy="98" r="4.5" fill="#2B2330"/><circle cx="88" cy="95" r="1.6" fill="#fff"/></g>
+              <g class="eye" style="transform-origin:116px 96px"><circle cx="116" cy="96" r="10" fill="#fff"/><circle cx="118" cy="98" r="4.5" fill="#2B2330"/><circle cx="120" cy="95" r="1.6" fill="#fff"/></g>
+              <!-- smile -->
+              <path id="smile" d="M86 118 Q100 130 114 118" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+              <!-- L3 sparkle -->
+              <g class="acc2" id="acc2"><path d="M150 70 l3 -8 3 8 8 3 -8 3 -3 8 -3 -8 -8 -3z" fill="#FFC24B"/></g>
+            </svg>
+          </div>
+        </div>
+
+        <div class="speech" id="speech">
+          <h2 id="sTitle">Hi, Maya! 👋</h2>
+          <p id="sBody">I'm your Sidekick — think of me as a teammate who handles the busywork of week one, so you can focus on settling in. Shall we get started?</p>
+        </div>
+      </div>
+
+      <!-- ABILITIES -->
+      <div class="ablabel" id="ablabel">What I can do (grows with you)</div>
+      <div class="abilities">
+        <div class="ab on" data-c="know"><div class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="#fff"><path d="M20 6L9 17l-5-5"/></svg></div><div class="ai"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 19V6a2 2 0 0 1 2-2h12v15H6a2 2 0 0 0-2 2z"/><path d="M8 8h7M8 12h7"/></svg></div><div class="al">Answer questions</div></div>
+        <div class="ab" data-c="dir"><div class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="#fff"><path d="M20 6L9 17l-5-5"/></svg></div><div class="lockico" id="lk-dir">🔒</div><div class="ai"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.5 3-5 7-5s7 1.5 7 5"/></svg></div><div class="al">Meet your team</div></div>
+        <div class="ab" data-c="cal"><div class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="#fff"><path d="M20 6L9 17l-5-5"/></svg></div><div class="lockico" id="lk-cal">🔒</div><div class="ai"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="4" y="5" width="16" height="16" rx="2.5"/><path d="M16 3v4M8 3v4M4 10h16"/></svg></div><div class="al">Schedule for you</div></div>
+        <div class="ab locked" data-c="dept"><div class="lockico">🔒</div><div class="ai"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/></svg></div><div class="al">Cross-dept</div></div>
+      </div>
+
+      <!-- reveal slot -->
+      <div id="revealSlot" style="margin-top:8px; flex:none"></div>
+
+      <!-- ACTIONS -->
+      <div class="actions" id="actions"></div>
+
+      <div class="dots" id="dots"><i class="on"></i><i></i><i></i><i></i><i></i></div>
+    </div>
+  </div>
+
+  <!-- level up toast -->
+  <div class="toast" id="toast">
+    <div class="ti"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5 5.5.8-4 3.9 1 5.5L12 16"/></svg></div>
+    <div><h5 id="toastT">Level 2 unlocked! 🎉</h5><p id="toastB">You trusted me — I grew, and I learned a new skill.</p></div>
+  </div>
+
+<script>
+  const ring = document.getElementById('ring');
+  const RING_LEN = 540;
+  let xp = 12, level = 1, step = 0;
+
+  function setRing(){ ring.style.strokeDashoffset = RING_LEN - (RING_LEN * Math.min(100,xp)/100); }
+  function setDots(n){ document.querySelectorAll('#dots i').forEach((d,i)=>d.classList.toggle('on', i===n)); }
+  function say(title, body){
+    const sp = document.getElementById('speech');
+    sp.style.animation='none'; void sp.offsetWidth; sp.style.animation='rise .5s cubic-bezier(.2,.9,.3,1) both';
+    document.getElementById('sTitle').textContent = title;
+    document.getElementById('sBody').textContent = body;
+  }
+  function actions(html){ document.getElementById('actions').innerHTML = html; }
+  function unlockAbility(c){ const el=document.querySelector('.ab[data-c="'+c+'"]'); el.classList.add('on'); const lk=el.querySelector('.lockico'); if(lk) lk.remove(); }
+
+  function grow(toLevel){
+    level = toLevel;
+    const cw = document.getElementById('charwrap');
+    const scale = toLevel===1?.82 : toLevel===2?.95 : 1.08;
+    cw.style.transform = 'scale('+scale+')';
+    document.getElementById('haze').style.opacity = toLevel>=2 ? (toLevel>=3?'1':'.6') : '0';
+    if(toLevel>=2){ document.getElementById('armL').classList.add('show'); document.getElementById('armR').classList.add('show'); document.getElementById('antdot').setAttribute('r','7'); }
+    if(toLevel>=3){ document.getElementById('acc').classList.add('show'); document.getElementById('acc2').classList.add('show'); document.getElementById('smile').setAttribute('d','M82 116 Q100 134 118 116'); }
+    const names = {1:'✦ Level 1 · Helper', 2:'✦✦ Level 2 · Operator', 3:'✦✦✦ Level 3 · Partner'};
+    document.getElementById('lvlpill').textContent = names[toLevel];
+  }
+
+  function levelUp(toLevel, skill){
+    grow(toLevel);
+    const t = document.getElementById('toast');
+    document.getElementById('toastT').textContent = 'Level '+toLevel+' unlocked! 🎉';
+    document.getElementById('toastB').textContent = skill;
+    t.classList.add('show'); sparkle();
+    setTimeout(()=>t.classList.remove('show'), 3200);
+  }
+
+  function reveal(html){ document.getElementById('revealSlot').innerHTML = html; }
+
+  // ---------- FLOW ----------
+  function go(n){
+    step = n; setDots(Math.min(n,4));
+    if(n===0){
+      say("Hi, Maya! 👋","I'm your Sidekick — a teammate who handles the busywork of week one so you can settle in. Everything stays between us. Ready?");
+      actions('<button class="btn primary" onclick="go(1)">Hi! Let\'s start ✨</button>');
+      reveal('');
+    }
+    if(n===1){
+      say("First — what's on your mind?","No wrong answers. Pick one and I'll take it from there.");
+      actions('<div class="chips">' +
+        '<button class="chip" onclick="pick(\'Get me set up\')">🧰 Get me set up</button>' +
+        '<button class="chip" onclick="pick(\'Meet people\')">🤝 Meet people</button>' +
+        '<button class="chip" onclick="pick(\'Understand my role\')">🎯 My role</button></div>');
+    }
+    if(n===2){
+      xp = 34; setRing();
+      say("Nice — let's get you set up 🧰","I pulled your details from your offer letter and drafted your profile. Want me to fill it in? You can edit anything.");
+      actions('<button class="btn primary" onclick="go(3)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg>Yes, fill it in</button><button class="btn soft" onclick="go(3)">I\'ll do it later</button>');
+    }
+    if(n===3){
+      say("All set! That felt good ✅","Now I'd love to help you meet the right people — but I'll only look at what you allow. May I peek at the team directory?");
+      actions(permCard('dir','🧭','team directory',
+        'To find <b>who you should meet first</b>, I need read-only access to the org directory.',
+        'Read-only · nothing shared · revoke anytime',
+        'go(4)'));
+    }
+    if(n===4){
+      // directory granted -> level 2
+      unlockAbility('dir'); document.getElementById('lk-dir')?.remove();
+      levelUp(2,'I can see the team and suggest who to meet.');
+      reveal('<div class="reveal"><div class="av" style="background:linear-gradient(140deg,#13C2A8,#0FB39A)">RK</div><div><div class="rn">Rina Kohn</div><div class="rr">DevOps lead · you meet Thu</div></div><span class="rtag">suggested</span></div>');
+      say("Found her! 🎉","You're meeting DevOps on Thursday — a quick coffee with Rina first would help. Want me to set it up? For that, I'd need your calendar.");
+      actions(permCard('cal','📅','your calendar',
+        'To <b>book the coffee &amp; add a prep brief</b>, may I use your calendar?',
+        'I only book with your okay · you see every invite',
+        'go(5)'));
+    }
+    if(n===5){
+      // calendar granted -> level 3
+      unlockAbility('cal'); document.getElementById('lk-cal')?.remove();
+      xp = 78; setRing();
+      levelUp(3,'I can schedule meetings for you now.');
+      reveal('<div class="reveal"><div class="av" style="background:linear-gradient(140deg,#4D8DF6,#3B7BE8)">☕</div><div><div class="rn">Coffee with Rina</div><div class="rr">Thu 10:30 · brief attached</div></div><span class="rtag">booked</span></div>');
+      say("Done — we're a team now ☕","I booked it and added a context brief 10 min before. From here I'll keep helping quietly, always with your okay.");
+      actions('<button class="btn ok" onclick="finish()"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg>Love it — continue</button>');
+    }
+  }
+
+  function pick(label){
+    say('Got it 👍', '\u201C'+label+'\u201D — I\'ll keep that front of mind.');
+    xp = 24; setRing();
+    setTimeout(()=>go(2), 650);
+  }
+
+  function permCard(c, icon, name, ask, micro, next){
+    return '<div class="perm">\
+      <div class="pt"><div class="pi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div><h3>Allow access to '+name+'?</h3></div>\
+      <div class="ask">'+ask+'</div>\
+      <div class="micro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>'+micro+'</div>\
+      <button class="btn primary" onclick="'+next+'">Allow '+icon+'</button>\
+      <button class="btn soft" onclick="declineHint()">Not now</button></div>';
+  }
+  function declineHint(){
+    say("No problem at all 🙂","I'll only ask again when something actually needs it — never a blanket request. You're always in control.");
+  }
+
+  function finish(){
+    unlockAbility('know');
+    say("Welcome aboard, Maya 💫","You leveled me up to Partner. I'll handle the busywork, connect you to people, and keep everything we say private. See you in Slack!");
+    actions('<button class="btn primary" onclick="go(0)">↺ Replay the intro</button>');
+    document.getElementById('ablabel').textContent = 'Your Sidekick\'s skills';
+    sparkle(); setTimeout(sparkle,250);
+    setDots(4);
+  }
+
+  // confetti
+  function sparkle(){
+    const phone = document.querySelector('.phone'); const rect = phone.getBoundingClientRect();
+    const cx = rect.left + rect.width/2, cy = rect.top + 150;
+    const colors=['#FFC24B','#FF4B5C','#13C2A8','#9B8CFF','#4D8DF6'];
+    for(let i=0;i<22;i++){
+      const s=document.createElement('div'); s.className='spark';
+      s.style.cssText='width:9px;height:9px;border-radius:2px;background:'+colors[i%5]+';left:'+cx+'px;top:'+cy+'px;';
+      document.body.appendChild(s);
+      const ang=Math.random()*Math.PI*2, dist=70+Math.random()*150;
+      s.animate([{transform:'translate(0,0) rotate(0)',opacity:1},{transform:'translate('+Math.cos(ang)*dist+'px,'+(Math.sin(ang)*dist+90)+'px) rotate('+(Math.random()*540)+'deg)',opacity:0}],{duration:1100+Math.random()*500,easing:'cubic-bezier(.2,.6,.3,1)'});
+      setTimeout(()=>s.remove(),1700);
+    }
+  }
+
+  setRing(); go(0);
+</script>
+</body>
+</html>

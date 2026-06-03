@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HiBob Home Assignment - Tomer Sahar</title>
+    <!-- Using the exact brand fonts from your prototype -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Mulish:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* HiBob Brand Colors extracted from your prototype & screenshot */
+            --coral: #FF4B5C; 
+            --coral-deep: #E5384F; 
+            --teal: #13C2A8; 
+            --yellow: #FFC24B;
+            --lav: #9B8CFF; 
+            --ink: #2B2330; 
+            --cream: #FFF7F1;
+            --white: #ffffff;
+            
+            --disp: 'Fredoka', ui-rounded, system-ui, sans-serif;
+            --body: 'Mulish', ui-sans-serif, system-ui, sans-serif;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--body);
+            background-color: var(--cream);
+            color: var(--ink);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            position: relative;
+            padding: 20px;
+        }
+
+        /* Organic brand background blobs inspired by your prototype and the brand image */
+        .blob {
+            position: fixed;
+            border-radius: 46% 54% 58% 42%/52% 48% 52% 48%;
+            filter: blur(8px);
+            opacity: 0.5;
+            z-index: -1;
+            animation: drift 18s ease-in-out infinite;
+        }
+        .b1 { width: 450px; height: 450px; background: var(--coral); top: -15%; left: -10%; }
+        .b2 { width: 350px; height: 350px; background: var(--yellow); bottom: -10%; right: -5%; animation-delay: -4s; }
+        .b3 { width: 300px; height: 300px; background: var(--lav); top: 40%; left: -10%; animation-delay: -8s; }
+        .b4 { width: 280px; height: 280px; background: var(--teal); top: -5%; right: 15%; animation-delay: -12s; }
+
+        @keyframes drift {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(30px, -40px) rotate(15deg); }
+        }
+
+        /* Main Glassmorphism Container */
+        .main-wrapper {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            max-width: 800px;
+            width: 100%;
+            border-radius: 46px; /* Soft brand curves */
+            padding: 60px 50px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(43, 35, 48, 0.08);
+            animation: rise 0.8s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+        }
+
+        @keyframes rise {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header {
+            margin-bottom: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .logo-image {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 25px;
+            border-radius: 32px;
+            box-shadow: 0 10px 30px rgba(255, 75, 92, 0.2);
+            transition: transform 0.4s cubic-bezier(0.2, 1.2, 0.3, 1);
+            object-fit: cover;
+        }
+
+        .logo-image:hover {
+            transform: scale(1.08) translateY(-5px);
+        }
+
+        .title {
+            font-family: var(--disp);
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: var(--ink);
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--coral);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .section-title {
+            font-family: var(--disp);
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 30px 0 15px;
+            color: var(--ink);
+            text-align: left;
+            padding-left: 5px;
+        }
+
+        /* Presentation Dual-Buttons */
+        .presentation-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .pres-btn {
+            background-color: var(--coral);
+            color: var(--white);
+            border-radius: 20px;
+            padding: 18px 20px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.2, 1.2, 0.3, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 8px 24px rgba(255, 75, 92, 0.25);
+        }
+
+        .pres-btn:hover {
+            background-color: var(--coral-deep);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(255, 75, 92, 0.35);
+        }
+
+        .pres-btn.hb-btn {
+            background-color: var(--teal);
+            box-shadow: 0 8px 24px rgba(19, 194, 168, 0.25);
+        }
+        
+        .pres-btn.hb-btn:hover {
+            background-color: #0fa892;
+            box-shadow: 0 12px 30px rgba(19, 194, 168, 0.35);
+        }
+
+        /* General Action Buttons */
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            width: 100%;
+        }
+
+        .action-button {
+            background-color: var(--white);
+            border: 2px solid transparent;
+            border-radius: 24px;
+            padding: 24px 20px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--ink);
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.2, 1.2, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 20px rgba(43, 35, 48, 0.04);
+        }
+
+        .action-button .icon {
+            font-size: 2.2rem;
+            margin-bottom: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .action-button:hover {
+            border-color: var(--coral);
+            color: var(--coral);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(255, 75, 92, 0.15);
+        }
+
+        .action-button:hover .icon {
+            transform: scale(1.15);
+        }
+
+        @media (max-width: 600px) {
+            .main-wrapper {
+                padding: 40px 20px;
+                border-radius: 36px;
+            }
+            .title { font-size: 2rem; }
+            .presentation-group { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Organic Background Blobs -->
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="blob b3"></div>
+    <div class="blob b4"></div>
+
+    <div class="main-wrapper">
+        <div class="header">
+            <!-- Local Logo Image (logo.png must be in the same folder) -->
+            <img src="logo.png" alt="HiBob Logo" class="logo-image">
+            <h1 class="title">Product Home Assignment</h1>
+            <p class="subtitle">Tomer Sahar</p>
+        </div>
+
+        <div class="section-title">Presentations</div>
+        <!-- Presentations grouped together so both EN & HB are immediately available -->
+        <div class="presentation-group">
+            <a href="https://gamma.app/docs/Bob-Sidekick-EN-ts796rmroh2n5v5" target="_blank" class="pres-btn">
+                <span>📊</span> Presentation (EN)
+            </a>
+            <a href="https://gamma.app/docs/Bob-Sidekick-HB-0jvpffov1g7sp2a" target="_blank" class="pres-btn hb-btn">
+                <span>📊</span> Presentation (HB)
+            </a>
+        </div>
+
+        <div class="section-title">Materials & Deliverables</div>
+        <div class="button-grid">
+            <a href="https://gamma.app/docs/Untitled-4kxdhhibrd1yfpi" target="_blank" class="action-button">
+                <span class="icon">🚀</span>
+                <span>Elevator Pitch</span>
+            </a>
+            
+            <!-- Link to the interactive prototype file you uploaded -->
+            <a href="Bob_Sidekick_Demo - APP V2.html" target="_blank" class="action-button">
+                <span class="icon">✨</span>
+                <span>Interactive Prototype</span>
+            </a>
+            
+            <a href="https://cv.tomersahar.com/" target="_blank" class="action-button">
+                <span class="icon">📄</span>
+                <span>Resume</span>
+            </a>
+        </div>
+    </div>
+
+</body>
+</html>
