@@ -6,8 +6,8 @@ services:
     container_name: hibob-web
     restart: unless-stopped
     networks:
-      - cloudflare_network # שים לב לעדכן לשם רשת הקלאודפלייר שלך אם היא נקראת אחרת
+      - openclaw_default
 
 networks:
-  cloudflare_network:
+  openclaw_default:
     external: true
