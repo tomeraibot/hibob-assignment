@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  hibob-web:
+    build: .
+    container_name: hibob-web
+    restart: unless-stopped
+    networks:
+      - cloudflare_network # שים לב לעדכן לשם רשת הקלאודפלייר שלך אם היא נקראת אחרת
+
+networks:
+  cloudflare_network:
+    external: true
